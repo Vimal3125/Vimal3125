@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeSpace – Online Safety & Legal Help for Women</title>
+<style>
+  :root{--bg:#fdf6fb;--card:#fff;--text:#2a2233;--muted:#6f6679;--primary:#9333ea;--primary-d:#7e22ce;--danger:#dc2626;--ok:#059669;--border:#eadff0}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+  header{background:linear-gradient(135deg,#9333ea,#db2777);color:#fff;padding:26px 16px;text-align:center}
+  header h1{margin:0 0 6px;font-size:1.8rem}
+  header p{margin:0;opacity:.92}
+  .exit{position:fixed;top:10px;right:10px;z-index:30;background:#111;color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+  nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+  nav button{border:1px solid var(--border);background:#fff;padding:9px 15px;border-radius:999px;cursor:pointer;font-size:.93rem;color:var(--text)}
+  nav button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  main{max-width:820px;margin:22px auto;padding:0 16px 60px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .alert{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:14px;border-radius:10px;margin-bottom:18px}
+  .info{background:#f5f3ff;border:1px solid #ddd6fe;color:#4c1d95;padding:12px 14px;border-radius:10px;font-size:.9rem;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .help{border:1px solid var(--border);border-radius:12px;padding:14px;background:#fff}
+  .help b.num{display:block;font-size:1.5rem;color:var(--primary)}
+  .help a.call{display:inline-block;margin-top:8px;background:var(--primary);color:#fff;text-decoration:none;padding:7px 14px;border-radius:8px;font-size:.9rem}
+  label{display:block;font-weight:600;margin:14px 0 6px}
+  input[type=text],input[type=date],input[type=search],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff}
+  textarea{min-height:100px;resize:vertical}
+  input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid #c084fc;outline-offset:1px;border-color:var(--primary)}
+  .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:160px}
+  .btn{background:var(--primary);color:#fff;border:0;padding:11px 20px;border-radius:10px;font-size:1rem;cursor:pointer;margin-top:16px;margin-right:8px}
+  .btn:hover{background:var(--primary-d)}
+  .btn.sec{background:#fff;color:var(--text);border:1px solid var(--border)}
+  .btn.danger{background:var(--danger)}
+  .btn.small{padding:7px 13px;font-size:.88rem;margin-top:8px}
+  .hidden{display:none!important}
+  .hint{font-size:.85rem;color:var(--muted);margin-top:4px}
+  .item{border-left:4px solid var(--primary);background:#faf5ff;border-radius:8px;padding:12px 14px;margin-top:12px}
+  .item .meta{font-size:.82rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .tag{background:#f3e8ff;color:#6b21a8;padding:2px 8px;border-radius:999px;font-size:.78rem}
+  .chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--border)}
+  .chk input{margin-top:5px}
+  .bar{height:10px;background:#f1e8f7;border-radius:999px;overflow:hidden;margin:10px 0}
+  .bar div{height:100%;background:linear-gradient(90deg,#9333ea,#db2777);width:0;transition:width .3s}
+  pre{white-space:pre-wrap;background:#faf5ff;border:1px solid var(--border);padding:14px;border-radius:10px;font-family:inherit;font-size:.93rem}
+  details{border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-top:10px;background:#fff}
+  summary{cursor:pointer;font-weight:600}
+  footer{text-align:center;color:var(--muted);font-size:.82rem;padding:20px}
+
+  /* ---------- LAW FINDER ---------- */
+  .searchbar{position:relative}
+  .searchbar input{padding:14px 44px 14px 16px;font-size:1.05rem;border:2px solid #d8b4fe;border-radius:12px}
+  .searchbar button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#f3e8ff;color:#6b21a8;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem}
+  .sub{margin:18px 0 8px;font-size:1rem;color:var(--muted)}
+  .inc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+  .inc{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--border);background:#fff;border-radius:12px;padding:11px 12px;cursor:pointer;font:inherit;color:var(--text);transition:transform .12s,box-shadow .12s,border-color .12s}
+  .inc:hover{border-color:var(--primary);box-shadow:0 3px 10px rgba(147,51,234,.15);transform:translateY(-1px)}
+  .inc.on{background:#f3e8ff;border-color:var(--primary)}
+  .inc .ic{font-size:1.5rem}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+  .chip{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 13px;font-size:.88rem;cursor:pointer;color:var(--text)}
+  .chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .inc-panel{border-left:5px solid var(--primary);background:#faf5ff}
+  .inc-panel h3{margin:0 0 6px}
+  .law{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .law-h{padding:14px 16px;cursor:pointer}
+  .law-h h3{margin:6px 0 4px;font-size:1.05rem}
+  .codes{font-size:.82rem;color:var(--muted)}
+  .codes b{color:#6b21a8}
+  .sum{margin:8px 0 0;font-size:.95rem}
+  .more{padding:0 16px 12px;font-size:.93rem}
+  .more .pun{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d;padding:9px 12px;border-radius:8px;margin:6px 0}
+  .acts{display:flex;gap:8px;padding:0 16px 14px;flex-wrap:wrap}
+  .acts button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 12px;font-size:.85rem;cursor:pointer;color:var(--text)}
+  .acts button.on{background:#fef3c7;border-color:#f59e0b}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:2px 9px;border-radius:999px}
+  .c-cyber{background:#dbeafe;color:#1e40af}.c-criminal{background:#fee2e2;color:#991b1b}
+  .c-workplace{background:#ffedd5;color:#9a3412}.c-family{background:#fce7f3;color:#9d174d}
+  .c-property{background:#dcfce7;color:#166534}.c-health{background:#ccfbf1;color:#115e59}
+  .c-child{background:#fef9c3;color:#854d0e}.c-procedure{background:#e5e7eb;color:#374151}
+  .c-rights{background:#ede9fe;color:#5b21b6}
+  mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 2px}
+  .empty{text-align:center;padding:30px 10px;color:var(--muted)}
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+  #toast.show{opacity:1}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+  @media print{.exit,nav,.searchbar,.inc-grid,.chips,.acts,footer{display:none!important}.law{break-inside:avoid}.more{display:block!important}}
+</style>
+</head>
+<body>
+
+<button class="exit" onclick="quickExit()" title="Instantly leave this page (Esc)">⚡ Quick Exit</button>
+
+<header>
+  <h1>🌸 SafeSpace</h1>
+  <p>You are not alone. It is not your fault. Know your rights, find the law, get help.</p>
+</header>
+
+<nav>
+  <button id="tab-help" class="active" onclick="showTab('help')">🚨 Get Help Now</button>
+  <button id="tab-laws" onclick="showTab('laws')">⚖️ Find the Law</button>
+  <button id="tab-log" onclick="showTab('log')">📁 Evidence Log</button>
+  <button id="tab-report" onclick="showTab('report')">📝 Write a Complaint</button>
+  <button id="tab-protect" onclick="showTab('protect')">🛡️ Protect Yourself</button>
+</nav>
+
+<main>
+
+<!-- ============ GET HELP ============ -->
+<section id="help">
+  <div class="alert"><b>In immediate danger?</b> Call <b>112</b> (police/emergency) right now, or go to a safe place with people you trust.</div>
+  <div class="card">
+    <h2>Helplines (India)</h2>
+    <div class="grid">
+      <div class="help"><b class="num">112</b>Emergency – police<br><a class="call" href="tel:112">Call</a></div>
+      <div class="help"><b class="num">181</b>Women Helpline (24×7)<br><a class="call" href="tel:181">Call</a></div>
+      <div class="help"><b class="num">1930</b>National Cyber Crime Helpline<br><a class="call" href="tel:1930">Call</a></div>
+      <div class="help"><b class="num">1098</b>Childline (under 18)<br><a class="call" href="tel:1098">Call</a></div>
+      <div class="help"><b class="num">15100</b>Free legal aid (NALSA)<br><a class="call" href="tel:15100">Call</a></div>
+    </div>
+    <p class="hint">Numbers can change. If one does not connect, search for your state's women's helpline.</p>
+    <button class="btn" onclick="showTab('laws')">⚖️ Find which law protects me</button>
+  </div>
+  <div class="card">
+    <h2>Report online</h2>
+    <p>🔗 <b>National Cyber Crime Reporting Portal:</b> <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a></p>
+    <p>🔗 <b>Intimate images shared without consent?</b> <a href="https://stopncii.org" target="_blank" rel="noopener">StopNCII.org</a> helps block them from spreading on major platforms.</p>
+    <p>🔗 <b>National Commission for Women:</b> <a href="https://ncw.nic.in" target="_blank" rel="noopener">ncw.nic.in</a></p>
+  </div>
+  <div class="card">
+    <h2>What to do in the first hour</h2>
+    <ol>
+      <li><b>Don't reply</b> and don't delete anything yet.</li>
+      <li><b>Take screenshots</b> showing the username, date/time and the message (use the Evidence Log tab).</li>
+      <li><b>Block and report</b> the account on the platform.</li>
+      <li><b>Tell someone you trust</b>. You don't have to handle this alone.</li>
+      <li><b>File a complaint</b> on the portal or at your nearest police station / cyber cell.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ LAW FINDER ============ -->
+<section id="laws" class="hidden">
+  <div class="info">
+    ℹ️ <b>General information, not legal advice.</b> Since <b>1 July 2024</b> the BNS, BNSS and BSA replaced the IPC, CrPC and Evidence Act for new offences; older cases still use the old codes (old section numbers are shown on each card). Laws and section numbers change, so confirm with a lawyer, your District Legal Services Authority (free aid: <b>15100</b>) or the police.
+  </div>
+
+  <div class="card">
+    <h2>Find the law that protects you</h2>
+    <div class="searchbar">
+      <input id="q" type="search" autocomplete="off" aria-label="Search laws"
+             placeholder="Search by what happened or a word: blackmail, stalking, dowry, 498A, maternity…">
+      <button id="qclear" class="hidden" aria-label="Clear search" title="Clear">✕</button>
+    </div>
+    <p class="hint">Tip: press <b>/</b> to jump to search. You can also search old IPC numbers like <i>354D</i> or <i>498A</i>.</p>
+    <h3 class="sub">Or tap what happened to you</h3>
+    <div id="incidents" class="inc-grid"></div>
+  </div>
+
+  <div id="incPanel" class="card inc-panel hidden"></div>
+
+  <div id="cats" class="chips" role="group" aria-label="Filter by category"></div>
+  <div id="meta" class="hint" aria-live="polite"></div>
+  <div id="lawList"></div>
+</section>
+
+<!-- ============ EVIDENCE LOG ============ -->
+<section id="log" class="hidden">
+  <div class="info">🔒 Everything here is saved <b>only on this device</b>. Nothing is sent anywhere. Use "Delete all" when you finish on a shared device.</div>
+  <div class="card">
+    <h2>Record an incident</h2>
+    <form id="logForm" autocomplete="off">
+      <div class="row">
+        <div><label for="l_date">Date it happened</label><input type="date" id="l_date" required></div>
+        <div><label for="l_platform">Platform</label>
+          <select id="l_platform" required>
+            <option value="">Choose…</option><option>Instagram</option><option>WhatsApp</option><option>Facebook</option>
+            <option>X / Twitter</option><option>Snapchat</option><option>YouTube</option><option>Telegram</option>
+            <option>Email</option><option>SMS / Calls</option><option>Other</option>
+          </select></div>
+      </div>
+      <div class="row">
+        <div><label for="l_type">Type of abuse</label>
+          <select id="l_type" required>
+            <option value="">Choose…</option><option>Threats</option><option>Abusive / insulting messages</option>
+            <option>Stalking / repeated contact</option><option>Fake profile of me</option>
+            <option>Private photos shared or threatened</option><option>Morphed / edited images</option>
+            <option>Blackmail / extortion</option><option>Sexual harassment</option><option>Doxxing (personal info shared)</option><option>Other</option>
+          </select></div>
+        <div><label for="l_user">Their username / number / link</label><input type="text" id="l_user" placeholder="e.g. @username or +91…"></div>
+      </div>
+      <label for="l_desc">What happened?</label>
+      <textarea id="l_desc" placeholder="Write what was said or done, in your own words." required></textarea>
+      <label for="l_proof">Where are your screenshots saved?</label>
+      <input type="text" id="l_proof" placeholder="e.g. Folder 'Evidence' on my phone / emailed to myself">
+      <button class="btn" type="submit">Save incident</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Saved incidents (<span id="logCount">0</span>)</h2>
+    <div id="logList"></div>
+    <button class="btn sec" onclick="exportLog()">⬇ Download as text file</button>
+    <button class="btn danger" onclick="clearLog()">Delete all</button>
+  </div>
+</section>
+
+<!-- ============ COMPLAINT WRITER ============ -->
+<section id="report" class="hidden">
+  <div class="card">
+    <h2>Complaint draft generator</h2>
+    <p class="hint">Fill what you know. It creates a clear draft for the cybercrime portal or the police. Laws you ⭐ saved in "Find the Law" are added automatically. Your details stay on your device.</p>
+    <div class="row">
+      <div><label for="c_name">Your name</label><input type="text" id="c_name"></div>
+      <div><label for="c_city">City / Police station area</label><input type="text" id="c_city"></div>
+    </div>
+    <div class="row">
+      <div><label for="c_acc">Accused's username / number / link</label><input type="text" id="c_acc"></div>
+      <div><label for="c_plat">Platform</label><input type="text" id="c_plat" placeholder="Instagram, WhatsApp…"></div>
+    </div>
+    <div class="row">
+      <div><label for="c_from">Started on (date)</label><input type="date" id="c_from"></div>
+      <div><label for="c_known">Do you know the person?</label>
+        <select id="c_known"><option>No, unknown person</option><option>Yes, I know them</option></select></div>
+    </div>
+    <label for="c_what">What happened?</label>
+    <textarea id="c_what" placeholder="Describe the incidents in order. Include threats, demands, fake profiles, shared images, etc."></textarea>
+    <label for="c_ev">Evidence you have</label>
+    <input type="text" id="c_ev" placeholder="e.g. 12 screenshots, chat export, profile links">
+    <button class="btn" onclick="makeComplaint()">Generate draft</button>
+    <div id="c_out" class="hidden">
+      <h3>Your draft</h3>
+      <pre id="c_text"></pre>
+      <button class="btn sec" onclick="copyDraft()">📋 Copy</button>
+      <button class="btn sec" onclick="window.print()">🖨 Print</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROTECT YOURSELF ============ -->
+<section id="protect" class="hidden">
+  <div class="card">
+    <h2>Online safety checklist</h2>
+    <div class="bar"><div id="bar"></div></div>
+    <div id="barText" class="hint"></div>
+    <div id="checklist"></div>
+  </div>
+  <div class="card">
+    <h2>Quick guides</h2>
+    <details><summary>Someone is threatening to leak my photos</summary>
+      <p>Do not pay or send more content. Save the threats as evidence, report the account, and use <a href="https://stopncii.org" target="_blank" rel="noopener">StopNCII.org</a> for intimate images. File a complaint at cybercrime.gov.in or call 1930 / 112. Blackmailers rely on your silence, so telling a trusted person helps.</p>
+      <button class="btn sec small" onclick="goLaw('blackmail')">⚖️ See the laws</button></details>
+    <details><summary>Someone made a fake profile of me</summary>
+      <p>Collect the profile link and screenshots. Use the platform's "impersonation" report option, ask friends to report it too, and include it in your cybercrime complaint.</p>
+      <button class="btn sec small" onclick="goLaw('fake')">⚖️ See the laws</button></details>
+    <details><summary>I'm being stalked or flooded with messages</summary>
+      <p>Block all channels, keep a dated log, set accounts to private, turn off location sharing, and tell someone who can check in on you. Repeated contact after you said stop is reportable.</p>
+      <button class="btn sec small" onclick="goLaw('stalk')">⚖️ See the laws</button></details>
+    <details><summary>I'm receiving abusive comments / trolling</summary>
+      <p>You don't owe anyone a reply. Use "restrict", "mute" and comment filters, report in bulk, and screenshot first. Persistent targeted abuse can be reported to the police.</p>
+      <button class="btn sec small" onclick="goLaw('threat')">⚖️ See the laws</button></details>
+    <details><summary>I want to support a friend who is being harassed</summary>
+      <p>Listen without blaming. Never ask "why did you share that?". Help her gather evidence, report accounts, and go with her to file the complaint if she wants.</p></details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  SafeSpace · This page collects no personal data and sends nothing over the internet.<br>
+  Press “Quick Exit” or the Esc key anytime to leave instantly.
+</footer>
+<div id="toast" role="status"></div>
+
+<script>
+/* =========================================================
+   BASIC HELPERS
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get = k => { try { return JSON.parse(localStorage.getItem(k)) || null; } catch(e){ return null; } };
+const put = (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),1800); }
+
+const TABS = ["help","laws","log","report","protect"];
+function showTab(name){
+  TABS.forEach(t=>{ $(t).classList.toggle("hidden", t!==name); $("tab-"+t).classList.toggle("active", t===name); });
+  window.scrollTo(0,0);
+}
+function quickExit(){ location.replace("https://www.google.com"); }
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){
+    if(document.activeElement===$("q") && $("q").value){ clearSearch(); return; }
+    quickExit();
+  }
+  if(e.key==="/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){
+    e.preventDefault(); showTab("laws"); $("q").focus();
+  }
+});
+
+/* =========================================================
+   LAW DATABASE
+   fields: id, title, act, sections, old (IPC/CrPC), category, summary, punishment/outcome, keywords
+   ========================================================= */
+const RAW = [
+/* ---------------- CRIMINAL – BNS ---------------- */
+["rape","Rape – definition & punishment","Bharatiya Nyaya Sanhita (BNS) 2023","Sec 63, 64","IPC 375, 376","criminal","Sex without a woman's free consent, against her will, by force, fear, deceit or intoxication, or with a girl under 18, is rape. Not resisting does not mean consenting. (The exception for a wife aged 18+ is still in the text and has been challenged in court.)","Rigorous imprisonment 10 years to life, plus fine.","sexual assault rape forced sex molested violated consent no means no"],
+["rape2","Aggravated & gang rape","BNS 2023","Sec 65, 66, 70","IPC 376(3), 376A, 376AB, 376D, 376DA, 376DB","criminal","Higher punishment where the victim is under 16 or under 12, where several persons act together, or where the victim dies or is left in a persistent vegetative state.","Under 16: 20 years to life. Under 12: 20 years to life or death. Gang rape: 20 years to life (victim under 18: life or death). Victim dies/vegetative state: 20 years to life or death.","gang rape minor child group multiple men death aggravated"],
+["rape3","Sex by deceit, false promise of marriage, or by a person in authority","BNS 2023","Sec 68, 69","IPC 376C (Sec 69 is new)","criminal","Sex obtained by deceit, or by a false promise of marriage made with no intention of keeping it, is a separate offence. So is sex by a person in authority (employer, public servant, jail or hospital staff).","Sec 69: up to 10 years + fine. Sec 68: 5 to 10 years + fine.","false promise marriage cheated boyfriend deceit promise of job authority boss"],
+["ident","Disclosing a survivor's identity","BNS 2023","Sec 72, 73","IPC 228A","criminal","Printing or publishing the name or any detail that can identify a victim of sexual offences is illegal, including on social media. Court proceedings can't be published without court permission.","Up to 2 years + fine.","identity leak privacy name secret media publish survivor"],
+["modesty","Assault or force to outrage a woman's modesty","BNS 2023","Sec 74","IPC 354","criminal","Using force or assault on a woman intending to outrage her modesty: groping, inappropriate touching, pulling at clothes.","1 to 5 years + fine.","molest touch grope outrage modesty eve teasing bus metro crowd inappropriate touching"],
+["harass","Sexual harassment","BNS 2023","Sec 75","IPC 354A","criminal","Unwelcome physical contact, a demand for sexual favours, showing pornography against her will, or sexually coloured remarks, including by message, call or social media.","Contact / demands / porn: up to 3 years, fine, or both. Sexual remarks: up to 1 year, fine, or both.","sexual harassment remark comment dm message obscene text whatsapp lewd porn send pictures"],
+["disrobe","Assault with intent to disrobe","BNS 2023","Sec 76","IPC 354B","criminal","Assaulting or using force on a woman to strip her or force her to be naked.","3 to 7 years + fine.","disrobe strip naked clothes forcibly"],
+["voy","Voyeurism – watching or recording private acts","BNS 2023","Sec 77","IPC 354C","criminal","Watching, capturing or sharing images of a woman in a private act without consent: hidden cameras in trial rooms, hostels or toilets, or sharing intimate videos that were made for private use.","First conviction 1–3 years + fine; repeat 3–7 years + fine.","hidden camera spy cam trial room washroom hostel mms video leak recording private secret recording"],
+["stalk","Stalking (including cyberstalking)","BNS 2023","Sec 78","IPC 354D","criminal","Following a woman, contacting her repeatedly despite clear disinterest, or monitoring her use of the internet, email or any electronic communication.","First conviction: up to 3 years + fine. Repeat: up to 5 years + fine.","stalking following cyberstalk repeated calls messages track monitor watch online"],
+["insult","Insulting a woman's modesty (words, gestures, acts)","BNS 2023","Sec 79","IPC 509","criminal","Any word, sound, gesture or object meant to insult a woman's modesty or intrude on her privacy: catcalling, street harassment, abusive or vulgar comments and messages.","Up to 3 years + fine.","eve teasing catcall whistle comment abuse troll insult trolling gesture street public vulgar"],
+["intim","Criminal intimidation – threats","BNS 2023","Sec 351","IPC 503, 506","criminal","Threatening harm to a person, her reputation or property, including threatening to expose private photos or to falsely accuse her. Threats to a woman's chastity are treated as serious, and anonymous threats get extra punishment.","Up to 2 years; up to 7 years for threats of death, grievous hurt or to impute unchastity to a woman.","threat threaten blackmail intimidate scare warn anonymous message"],
+["extort","Extortion & blackmail","BNS 2023","Sec 308","IPC 383–389","criminal","Putting someone in fear of injury or exposure to make her hand over money, property or anything of value, including 'pay or I'll leak your photos' (sextortion).","Up to 7 years + fine; up to 10 years or more where the threat is of death, grievous hurt or false accusation of a serious offence.","extortion blackmail sextortion money pay demand threaten leak"],
+["defam","Defamation","BNS 2023","Sec 356","IPC 499, 500","criminal","Damaging a person's reputation by false words, posts, images or videos, including fake posts and rumours about a woman's character.","Up to 2 years simple imprisonment, fine, community service, or a combination.","defamation rumour character fake post reputation false allegation slander"],
+["person","Cheating by personation (fake identity)","BNS 2023","Sec 319","IPC 416, 419","criminal","Pretending to be another person, or using someone else's identity, to cheat or cause harm. Used for fake profiles, fake accounts and fake numbers.","Up to 5 years, fine, or both.","fake profile impersonate identity pretend personation catfish"],
+["forge","Forgery of records (including electronic)","BNS 2023","Sec 336","IPC 463–471","criminal","Making false documents or electronic records (fake chats, fake screenshots, fake IDs, edited images) to cause damage or harm someone's reputation.","Up to 2 years; up to 7 years where intended to cheat or harm reputation.","forgery fake chat screenshot edited morphed document false record"],
+["obscene","Obscene material and acts","BNS 2023","Sec 294, 296","IPC 292, 293, 294","criminal","Selling, sharing or showing obscene material (including electronically), and obscene acts or songs in public.","Sec 294: first up to 2 years + fine; repeat up to 5 years + fine. Sec 296: up to 3 months, fine, or both.","obscene porn sharing public indecent flashing exposure"],
+["hurt","Hurt, grievous hurt & wrongful confinement","BNS 2023","Sec 115, 117, 126, 127","IPC 323, 325, 341, 342","criminal","Beating, injuring, locking up or restraining a woman is a separate offence, whether or not it also falls under domestic-violence law.","Hurt: up to 1 year or fine up to ₹10,000. Grievous hurt: up to 7 years + fine. Confinement: imprisonment and/or fine.","beating hit injury slap locked confined restrained violence physical"],
+["acid","Acid attack","BNS 2023","Sec 124","IPC 326A, 326B","criminal","Causing permanent or partial damage with acid, or attempting or throwing acid. Sale of acid is regulated (Laxmi v Union of India, 2015). See also free treatment and compensation under BNSS.","Causing injury: 10 years to life + fine (paid to the victim). Attempt: 5–7 years + fine.","acid attack burn disfigure throw chemical"],
+["kidnap","Kidnapping, abduction & forced marriage","BNS 2023","Sec 87, 137, 138","IPC 363, 366","criminal","Kidnapping or abducting a woman to force her into marriage or sex, or by force or threat.","Sec 87: up to 10 years + fine. Kidnapping (Sec 137): up to 7 years + fine.","kidnap abduct forced marriage taken away elope force missing"],
+["traffic","Human trafficking","BNS 2023","Sec 143","IPC 370","criminal","Recruiting, transporting or harbouring a person by threat, force or deception for exploitation, including sexual exploitation and forced labour.","7–10 years + fine; more for several victims or minors (up to life).","trafficking forced labour sold bonded sexual exploitation job offer abroad"],
+["itpa","Trafficking for prostitution","Immoral Traffic (Prevention) Act 1956","Sec 3–8, 15–19, 21","—","criminal","Punishes brothel-keeping, living on earnings of prostitution, and procuring or detaining a person for prostitution. Provides rescue, protective homes and rehabilitation. A trafficked person is treated as a victim.","From 1–3 years up to 7+ years or life depending on the section; higher where children are involved.","trafficking prostitution brothel forced sex work rescue shelter"],
+["indecent","Indecent depiction of women","Indecent Representation of Women (Prohibition) Act 1986","Sec 3, 4, 6","—","criminal","Bans advertisements, publications, writings, paintings, figures or films that show women indecently, derogatorily or in a denigrating way.","First: up to 2 years + fine ₹2,000–50,000. Repeat: 2–7 years + ₹10,000–1 lakh.","advertisement indecent depiction women obscene magazine poster media"],
+["sati","Sati prevention","Commission of Sati (Prevention) Act 1987","Sec 3, 4, 5","—","criminal","Abetting or glorifying sati is a crime; forcing a widow towards sati is treated as murder.","Abetment: death or life. Glorifying: 1–7 years + fine.","sati widow glorification custom"],
+
+/* ---------------- CYBER – IT ACT ---------------- */
+["it66e","Violation of privacy – private images","Information Technology Act 2000","Sec 66E","—","cyber","Intentionally capturing, publishing or sending an image of someone's private area without consent where she expects privacy.","Up to 3 years, or fine up to ₹2 lakh, or both.","private photo leak intimate image mms nudes revenge porn privacy hidden camera"],
+["it67","Publishing obscene material online","IT Act 2000","Sec 67","—","cyber","Publishing or transmitting obscene material electronically.","First: up to 3 years + fine up to ₹5 lakh. Repeat: up to 5 years + up to ₹10 lakh.","obscene online post share video image website"],
+["it67a","Publishing sexually explicit material online","IT Act 2000","Sec 67A","—","cyber","Publishing or transmitting material containing sexually explicit acts. Covers sharing intimate videos or morphed explicit content.","First: up to 5 years + fine up to ₹10 lakh. Repeat: up to 7 years + up to ₹10 lakh.","sexually explicit video leak mms morphed porn share intimate"],
+["it66c","Identity theft","IT Act 2000","Sec 66C","—","cyber","Fraudulently using someone's password, digital signature or unique identification, for example running an account using her name or photos.","Up to 3 years + fine up to ₹1 lakh.","identity theft password fake account photos misuse profile"],
+["it66d","Cheating by personation using a computer","IT Act 2000","Sec 66D","—","cyber","Cheating by pretending to be someone else using a computer or phone: fake profiles, catfishing, fake calls.","Up to 3 years + fine up to ₹1 lakh.","fake profile catfish impersonation cheating online call"],
+["hack","Hacking & unauthorised access","IT Act 2000","Sec 43, 66","—","cyber","Accessing her phone, email or social accounts without permission, copying data, or installing spyware or stalkerware.","Sec 66: up to 3 years, fine up to ₹5 lakh, or both; compensation can be claimed under Sec 43.","hack hacked account phone spyware stalkerware password email access unauthorised"],
+["it67b","Child sexual abuse material online","IT Act 2000 & POCSO","IT Act Sec 67B · POCSO Sec 14, 15","—","child","Creating, storing, browsing or sharing sexual material involving anyone under 18 is a serious offence. Report on cybercrime.gov.in.","First: up to 5 years + ₹10 lakh. Repeat: up to 7 years + ₹10 lakh.","child porn csam minor photos video sexual under 18"],
+["rules","Platform takedown duties (24-hour rule)","IT (Intermediary Guidelines & Digital Media Ethics Code) Rules 2021","Rule 3(2)","—","cyber","Platforms must remove content showing nudity, a sexual act or impersonation (including morphed images) within 24 hours of a complaint by the person or someone on her behalf. Each platform must have a Grievance Officer who acknowledges within 24 hours and resolves within 15 days.","A platform that ignores you can lose its 'safe harbour' protection. Escalate to the Grievance Officer, then complain at cybercrime.gov.in.","takedown remove report platform instagram facebook youtube grievance officer content removal morphed"],
+["sextguide","Guide: Sextortion & non-consensual intimate images","Combined: BNS + IT Act","BNS 308, 351, 77, 75 · IT Act 66E, 67A","—","cyber","There is no single law; police combine sections. Don't pay or send more. Save evidence, report to the platform, hash images at StopNCII.org, and file a complaint (1930 / cybercrime.gov.in).","Penalties follow the sections used.","sextortion blackmail nudes video call recorded leak threaten pay money revenge porn intimate"],
+["deepguide","Guide: Morphed images & deepfakes","Combined: IT Act + BNS","IT Act 66C, 66D, 67, 67A · BNS 336, 356 · Rule 3(2)","—","cyber","AI-generated or edited sexual images of a real woman are covered by existing sections on forgery, impersonation, obscenity and defamation. Platforms must act within 24 hours of a complaint, and government advisories require them to remove deepfakes.","Penalties follow the sections used.","deepfake ai fake photo morph edit face swap generated"],
+["bullyguide","Guide: Cyberbullying, trolling & abusive comments","Combined: BNS + IT Act","BNS 75, 78, 79, 351, 356 · IT Act 67","—","cyber","India has no stand-alone 'cyberbullying' law. Abusive, sexual or threatening messages and organised trolling are covered by the harassment, stalking, insult, intimidation and defamation sections.","Penalties follow the sections used.","cyberbullying trolling comments abuse hate instagram twitter dm bully online harassment"],
+
+/* ---------------- WORKPLACE ---------------- */
+["posh","Sexual harassment at the workplace or college (POSH Act)","Sexual Harassment of Women at Workplace (Prevention, Prohibition & Redressal) Act 2013","Sec 4, 9–13, 19, 26","Vishaka Guidelines 1997","workplace","Every employer with 10+ employees must have an Internal Committee (IC); smaller workplaces use the district Local Committee. Covers employees, contract staff, interns, domestic workers and visitors (colleges and universities have ICs too). Complaint within 3 months of the incident (extendable by 3 months). The IC can recommend interim relief (transfer, leave) and must finish the inquiry in 90 days. A complaint can be filed on her behalf if she can't.","Action under service rules and compensation; employer fine up to ₹50,000 for non-compliance (more for repeat). A police complaint under BNS 75 is also possible.","workplace office boss colleague sexual harassment internal committee icc posh intern job college university professor"],
+["maternity","Maternity benefits","Maternity Benefit Act 1961 (amended 2017)","Sec 5, 11A, 12, 21","—","workplace","26 weeks paid leave for the first two children (12 weeks from the third), 12 weeks for adoptive/commissioning mothers, crèche where 50+ employees, option to work from home, nursing breaks. An employer can't dismiss you or cut wages because of pregnancy. Applies to establishments with 10+ workers.","Employer: imprisonment 3 months to 1 year + fine ₹2,000–5,000.","maternity leave pregnant fired job pregnancy crèche paid leave dismissed"],
+["equal","Equal pay & non-discrimination at work","Equal Remuneration Act 1976 / Code on Wages 2019 · Constitution Art 15, 16, 39(d)","Code on Wages Sec 3","—","workplace","Employers must pay men and women equal wages for the same or similar work and cannot discriminate in recruitment, promotion or training because of gender.","Fine; repeat offences can lead to imprisonment (see the Code).","equal pay salary wage gender discrimination hiring promotion job"],
+["night","Women's night work & safe transport","Factories Act 1948 · State Shops & Establishments Acts","Varies by state","—","workplace","Many states allow women to work night shifts only with written consent and safety measures (transport, security, CCTV, restrooms). Rules differ by state, so check your state notification.","—","night shift transport cab safe job security women work hours"],
+
+/* ---------------- FAMILY & MARRIAGE ---------------- */
+["dv","Domestic violence (DV Act)","Protection of Women from Domestic Violence Act 2005","Sec 3, 12, 17–22, 31","—","family","Protects wives, live-in partners, mothers, sisters and daughters in a shared household from physical, sexual, verbal, emotional and economic abuse. A Magistrate can give protection orders, residence orders (you can't be thrown out), monetary relief, child custody and compensation. Apply through a Protection Officer, an NGO service provider, or directly to the Magistrate. No lawyer is required.","Breaching a protection order: up to 1 year + fine up to ₹20,000. Can run alongside BNS 85.","domestic violence husband beating abuse in-laws thrown out of house shared household live-in marriage maintenance economic abuse residence order"],
+["cruelty","Cruelty by husband or in-laws","BNS 2023","Sec 85, 86","IPC 498A","family","A husband or his relatives subjecting a woman to cruelty: harassment for dowry, or conduct that drives her towards suicide or causes serious injury or mental harm. A cognisable, non-bailable offence.","Up to 3 years + fine.","498a cruelty husband in-laws harassment mental torture dowry suicide"],
+["dowry","Dowry prohibition","Dowry Prohibition Act 1961","Sec 3, 4, 6, 8B","—","family","Giving, taking or demanding dowry is an offence. Dowry received must be handed over to the woman within 3 months and held in trust for her. Dowry Prohibition Officers can be appointed.","Giving/taking: min. 5 years + fine of ₹15,000 or the value of the dowry (whichever is more). Demanding: 6 months to 2 years + fine up to ₹10,000.","dowry demand gifts cash car gold in-laws marriage"],
+["dowdeath","Dowry death","BNS 2023","Sec 80","IPC 304B","family","If a married woman dies abnormally (burns, injury, unnatural circumstances) within 7 years of marriage and was harassed for dowry soon before her death, the court presumes dowry death.","Minimum 7 years up to life imprisonment.","dowry death bride burning suicide in-laws 304b"],
+["marfraud","Bigamy & sham marriage","BNS 2023","Sec 81, 82","IPC 493, 494, 495","family","Deceiving a woman into believing she is lawfully married, or marrying again while a spouse is alive.","Sec 81: up to 10 years + fine. Sec 82: up to 7 years + fine (up to 10 years if the first marriage is hidden).","bigamy second marriage fake marriage sham cheated husband already married"],
+["maint","Maintenance (financial support)","BNSS 2023 + personal laws","BNSS Sec 144 · HMA Sec 24, 25 · DV Act Sec 20","CrPC 125","family","A wife who cannot maintain herself (also children and parents) can get monthly maintenance, whatever her religion (Supreme Court 2024: Muslim women included). Interim maintenance is available while the case is on. Divorced Muslim women can also use the Muslim Women (Protection of Rights on Divorce) Act 1986.","Non-payment can lead to recovery and jail up to 1 month for each unpaid month.","maintenance alimony money divorce wife expenses separation children support"],
+["marriage","Marriage, divorce & custody laws","Hindu Marriage Act 1955 · Special Marriage Act 1954 · Christian / Parsi Marriage Acts · Guardians & Wards Act 1890","HMA Sec 13, 24, 25 · SMA Sec 27","—","family","Women can seek divorce on grounds including cruelty, desertion and adultery. Courts can award interim and permanent alimony and decide child custody (the child's welfare is the main test). The Special Marriage Act allows civil and inter-faith marriage.","—","divorce separation custody children cruelty desertion court alimony inter-faith court marriage"],
+["talaq","Triple talaq ban","Muslim Women (Protection of Rights on Marriage) Act 2019","Sec 3, 4, 5, 6","Shayara Bano v UoI (SC 2017)","family","Instant triple talaq (talaq-e-biddat) in any form, spoken, written or electronic, is void and illegal. The wife is entitled to a subsistence allowance and custody of minor children.","Husband: up to 3 years + fine.","triple talaq muslim divorce instant whatsapp"],
+["cmarriage","Child marriage","Prohibition of Child Marriage Act 2006","Sec 3, 9–12","—","child","A marriage where the girl is under 18 (or boy under 21) is voidable at the option of the underage party; marriage of a minor by force, enticement or trafficking is void. Anyone can report; Child Marriage Prohibition Officers can stop it.","Adult male marrying a child, or those who arrange or permit it: up to 2 years rigorous imprisonment or fine up to ₹1 lakh, or both.","child marriage underage minor girl 18 wedding stop report childline 1098"],
+
+/* ---------------- PROPERTY ---------------- */
+["hsa","Daughters' right to inherit","Hindu Succession (Amendment) Act 2005","Sec 6, 8","Vineeta Sharma v Rakesh Sharma (SC 2020)","property","Daughters have the same rights as sons in ancestral and self-acquired property, as coparceners by birth, whether or not the father was alive on 9 Sept 2005. A widow and mother also inherit. (Muslims, Christians and Parsis follow their own succession laws.)","—","property inheritance daughter share ancestral will father brother partition widow"],
+["stridhan","Stridhan – a woman's own property","Hindu law · BNS","BNS Sec 316 · Pratibha Rani v Suraj Kumar (SC 1985)","IPC 405, 406","property","Gifts, jewellery and money given to a woman before, at or after marriage are her absolute property (stridhan). A husband or in-laws who refuse to return it may commit criminal breach of trust.","BNS 316: up to 5 years, fine, or both.","stridhan jewellery gold gifts return husband in-laws property cheating breach of trust"],
+
+/* ---------------- CHILDREN ---------------- */
+["pocso","Children under 18 (POCSO Act)","Protection of Children from Sexual Offences Act 2012","Sec 3–15, 19, 21, 23, 24, 33, 37","—","child","Covers penetrative and non-penetrative sexual assault, sexual harassment and child pornography against anyone under 18. Anyone who knows of an offence must report it (Sec 19). Child-friendly procedure: statement at home, recorded by a woman officer, identity kept secret, trial in camera by a Special Court.","3 years up to life or death depending on the offence and its severity. Failing to report: up to 6 months.","child minor girl school teacher abuse under 18 pocso good touch bad touch"],
+
+/* ---------------- HEALTH ---------------- */
+["mtp","Safe & legal abortion","Medical Termination of Pregnancy (Amendment) Act 2021","Sec 3, 5A","—","health","Up to 20 weeks with one doctor's opinion; 20–24 weeks for rape survivors, minors, women with disability, change in marital status and other special cases (two doctors); beyond 24 weeks only for substantial foetal abnormalities (Medical Board). Married and unmarried women are both covered. Her identity must be kept confidential.","Revealing her identity: up to 1 year or fine.","abortion pregnancy mtp termination rape survivor consent doctor"],
+["pcpndt","Ban on sex selection","Pre-Conception & Pre-Natal Diagnostic Techniques Act 1994 (PCPNDT)","Sec 3A, 4, 5, 6, 22, 23","—","health","Determining or revealing the sex of an unborn child, or selecting the sex before conception, is prohibited. A woman forced into a sex-determination test or an abortion can report to the Appropriate Authority.","First: up to 3 years + ₹10,000. Repeat: up to 5 years + ₹50,000.","female foeticide sex determination ultrasound girl child abortion forced"],
+
+/* ---------------- RIGHTS & SUPPORT ---------------- */
+["const","Constitutional rights of women","Constitution of India","Art 14, 15(1), 15(3), 16, 21, 23, 39(a)(d), 42, 51A(e), 243D, 243T · Women's Reservation Act 2023","—","rights","Equality before the law; no discrimination on grounds of sex; the State may make special laws for women; equal opportunity in public jobs; right to life, dignity and privacy; ban on trafficking and forced labour; humane work conditions and maternity relief; every citizen's duty to renounce practices derogatory to women; one-third reservation in panchayats and municipalities, and in Lok Sabha and state assemblies (after delimitation).","—","constitution fundamental rights equality dignity privacy reservation panchayat article"],
+["cases","Landmark Supreme Court judgments","Case law","Vishaka (1997) · Laxmi (2015) · Shayara Bano (2017) · Puttaswamy (2017) · Vineeta Sharma (2020) · Mohd Abdul Samad (2024)","—","rights","Vishaka: workplace-harassment guidelines, later turned into the POSH Act. Laxmi: regulated acid sale and compensation. Shayara Bano: instant triple talaq unconstitutional. Puttaswamy: privacy is a fundamental right. Vineeta Sharma: daughters' equal coparcenary rights. Mohd Abdul Samad: Muslim women can claim maintenance under the secular law.","—","supreme court judgment case law vishaka laxmi shayara bano privacy"],
+["ncw","National & State Commissions for Women","National Commission for Women Act 1990","Sec 10","—","rights","The NCW can look into complaints, summon people, recommend action and take up cases on its own. State Women's Commissions do the same. File a complaint online at ncw.nic.in.","—","ncw commission complaint state commission women's commission"],
+["legalaid","Free legal aid","Legal Services Authorities Act 1987","Sec 12(c)","—","rights","Every woman is entitled to free legal services (a lawyer, court fees and documents) regardless of income, through the District Legal Services Authority (DLSA). NALSA helpline: 15100.","—","free lawyer legal aid dlsa nalsa 15100 cannot afford lawyer"],
+["schemes","Government support services (not laws)","Mission Shakti · One Stop Centres","—","—","rights","One Stop Centres (Sakhi) give police, medical, legal and counselling help plus short-term shelter under one roof. Women Helpline 181; Swadhar Greh shelters for women in difficult circumstances; Ujjawala for trafficking survivors. Details change, so confirm locally.","—","one stop centre sakhi shelter helpline 181 swadhar ujjawala mission shakti support counselling"],
+
+/* ---------------- POLICE & COURT PROCEDURE ---------------- */
+["fir","How to file an FIR (Zero FIR & e-FIR)","Bharatiya Nagarik Suraksha Sanhita (BNSS) 2023","Sec 173","CrPC 154","procedure","You can file at ANY police station (Zero FIR); it must be registered and then transferred. You can also send information electronically and sign within 3 days. For sexual offences against women, the information should be recorded by a woman police officer. You get a free copy of the FIR.","A police officer who refuses to register a cognisable offence can face departmental and legal action.","fir police complaint zero fir e fir station register copy"],
+["firrefuse","If police refuse to register your FIR","BNSS 2023","Sec 173(4), 175(3)","CrPC 154(3), 156(3)","procedure","Send your complaint in writing (post/email) to the Superintendent of Police. If it is still ignored, apply to the Magistrate, who can order the police to register the FIR and investigate. You can also approach the State Women's Commission or cybercrime.gov.in.","—","police not listening refuse fir ignore complaint sp magistrate"],
+["statement","Statement before a magistrate","BNSS 2023","Sec 183","CrPC 164","procedure","A survivor of a sexual offence can have her statement recorded by a magistrate (a woman magistrate where possible). This is strong evidence in court.","—","statement magistrate 164 woman officer recorded survivor"],
+["medical","Medical examination & free treatment","BNSS 2023","Sec 184, 397","CrPC 164A, 357C","procedure","A rape survivor can be examined by a registered doctor (a woman doctor where possible) with her consent. All hospitals, government and private, must give free first-aid or medical treatment to survivors of rape and acid attack and must not turn them away.","—","hospital treatment medical exam rape acid free first aid"],
+["comp","Victim compensation & witness protection","BNSS 2023","Sec 395, 396, 398","CrPC 357, 357A","procedure","Courts can order compensation. Every state has a Victim Compensation Scheme (the DLSA can help you apply), including for acid-attack and sexual-assault survivors, even if the accused isn't caught. A Witness Protection Scheme protects survivors and witnesses from threats.","—","compensation victim fund witness protection threat safety"],
+["bsa","Evidence rules that protect survivors","Bharatiya Sakshya Adhiniyam (BSA) 2023","Sec 63, 120","Evidence Act 65B, 114A","procedure","In rape cases, if sex is proved and the woman says she did not consent, the court presumes no consent. Electronic records (chats, screenshots, emails) are admissible if supported by the required certificate, so keep originals and metadata.","—","evidence consent presumption court electronic record certificate chat screenshot"],
+["arrest","Safeguards for women during arrest & questioning","BNSS 2023","Sec 43(5), 179","CrPC 46(4), 160","procedure","A woman shouldn't be arrested between sunset and sunrise except in exceptional cases with a woman officer and a magistrate's written permission. A woman can't be forced to come to the police station for questioning; she is questioned at her residence. Only women officers can search a woman.","—","arrest night police station questioning woman officer search rights"]
+];
+
+const LAWS = RAW.map(r=>{
+  const o = {id:r[0],title:r[1],act:r[2],sec:r[3],old:r[4],cat:r[5],sum:r[6],pun:r[7],kw:r[8]};
+  o.h = {
+    title:o.title.toLowerCase(), kw:o.kw.toLowerCase(), act:o.act.toLowerCase(),
+    sum:o.sum.toLowerCase(), pun:o.pun.toLowerCase(),
+    code:(o.sec+" "+o.old).toLowerCase().replace(/[^a-z0-9]/g,"")
+  };
+  return o;
+});
+const BYID = Object.fromEntries(LAWS.map(l=>[l.id,l]));
+
+const CATS = {all:"All", cyber:"💻 Cyber", criminal:"⚖️ Criminal", workplace:"🏢 Work", family:"👪 Family & marriage",
+              property:"🏡 Property", health:"🩺 Health", child:"🧒 Children", procedure:"📋 Police & court", rights:"🏛️ Rights & support"};
+const CATNAME = {cyber:"Cyber",criminal:"Criminal",workplace:"Work",family:"Family",property:"Property",health:"Health",child:"Children",procedure:"Procedure",rights:"Rights"};
+
+/* =========================================================
+   INCIDENTS – "what happened to you?"
+   ========================================================= */
+const INCIDENTS = [
+ {id:"blackmail",ic:"💣",label:"Blackmail / threat to leak my photos",laws:["sextguide","extort","intim","it66e","it67a","voy","rules","fir"],tip:"Don't pay or send more. Save the threats, report the account, hash images at StopNCII.org and call 1930."},
+ {id:"morph",ic:"🎭",label:"Morphed, fake or deepfake images of me",laws:["deepguide","it67a","it66e","forge","defam","person","rules","fir"],tip:"Screenshot the post and its link, report it to the platform (24-hour rule), then file on cybercrime.gov.in."},
+ {id:"fake",ic:"👤",label:"Fake profile / someone using my identity",laws:["it66c","it66d","person","defam","rules","fir"],tip:"Collect the profile URL, use the platform's 'impersonation' report, and include it in your complaint."},
+ {id:"threat",ic:"💬",label:"Threats, abuse or trolling online",laws:["bullyguide","intim","insult","harass","defam","stalk","rules"],tip:"Screenshot before blocking. Persistent or sexual threats can be reported even if the person is anonymous."},
+ {id:"stalk",ic:"👁️",label:"Stalking / repeated unwanted contact",laws:["stalk","insult","harass","intim","hack"],tip:"Keep a dated log of every contact (Evidence Log tab). Tell someone you trust where you are."},
+ {id:"hack",ic:"🔓",label:"My account or phone was hacked",laws:["hack","it66c","it66e","extort"],tip:"Change passwords from a safe device, turn on 2FA, check for spyware, and report on cybercrime.gov.in."},
+ {id:"leak",ic:"📹",label:"Private photo/video shared or secretly recorded",laws:["voy","it66e","it67a","sextguide","obscene","rules","ident"],tip:"Do not delete the evidence. Report to the platform for takedown and use StopNCII.org."},
+ {id:"public",ic:"🚌",label:"Catcalling / harassment in public",laws:["insult","modesty","harass","obscene","stalk"],tip:"Note the place, time and vehicle number. You can file a Zero FIR at any police station."},
+ {id:"touch",ic:"✋",label:"Touched or grabbed without consent",laws:["modesty","harass","disrobe","fir","medical"],tip:"This is a crime even if brief. A Zero FIR can be filed at any station."},
+ {id:"assault",ic:"🆘",label:"Rape / sexual assault",laws:["rape","rape2","rape3","ident","fir","medical","statement","comp","bsa","legalaid","schemes"],tip:"Go somewhere safe. Avoid washing or changing clothes if you can, so evidence is preserved. You can get free treatment at any hospital and call 112 / 181."},
+ {id:"work",ic:"🏢",label:"Harassment at work or college",laws:["posh","harass","modesty","insult","maternity","equal"],tip:"File with the Internal Committee within 3 months (extendable). Keep emails, messages and names of witnesses."},
+ {id:"dv",ic:"🏠",label:"Violence or abuse at home",laws:["dv","cruelty","hurt","dowry","maint","stridhan","legalaid","schemes"],tip:"If unsafe, call 112 / 181. A One Stop Centre can arrange shelter, medical and legal help."},
+ {id:"dowry",ic:"💍",label:"Dowry demand / in-laws harassment",laws:["dowry","cruelty","dowdeath","dv","stridhan","maint"],tip:"Keep proof of demands (messages, calls, witnesses). You can complain to the police and file under the DV Act."},
+ {id:"marriage",ic:"💔",label:"Cheated by marriage / forced marriage",laws:["marfraud","rape3","kidnap","marriage","cmarriage"],tip:"Collect any proof of the promise or marriage. For a minor being married, call 1098."},
+ {id:"talaq",ic:"📄",label:"Divorce, triple talaq or maintenance",laws:["talaq","maint","marriage","dv","legalaid"],tip:"You can claim maintenance even before the divorce is final. Free legal aid is available through the DLSA."},
+ {id:"property",ic:"🏡",label:"Property, inheritance & stridhan",laws:["hsa","stridhan","dv","marriage","legalaid"],tip:"Gather property papers and a list of gifts or jewellery you received. A daughter's share is equal to a son's."},
+ {id:"acid",ic:"🧪",label:"Acid attack",laws:["acid","medical","comp","fir","schemes"],tip:"Rinse with plenty of clean water immediately, go to a hospital (free treatment is mandatory) and call 112."},
+ {id:"traffic",ic:"⛓️",label:"Trafficking or forced work",laws:["traffic","itpa","kidnap","const","schemes"],tip:"Call 112 / 1098 (if under 18) / 181. Rescue and rehabilitation are your right."},
+ {id:"child",ic:"🧒",label:"Girl under 18: abuse or child marriage",laws:["pocso","cmarriage","it67b","ident","schemes"],tip:"Call Childline 1098. Anyone aware of the abuse is legally required to report it."},
+ {id:"pregnancy",ic:"🤰",label:"Pregnancy: abortion, sex selection, job loss",laws:["mtp","pcpndt","maternity","equal"],tip:"The decision is yours. Your identity must be kept confidential by the doctor."},
+ {id:"police",ic:"👮",label:"Police won't register my complaint",laws:["fir","firrefuse","ncw","legalaid","arrest"],tip:"Send it in writing to the SP, then apply to the Magistrate. You can also complain to the Women's Commission."},
+ {id:"legal",ic:"⚖️",label:"I need free legal help or compensation",laws:["legalaid","comp","ncw","schemes","medical"],tip:"Contact your District Legal Services Authority or call 15100. Help is free for women."}
+];
+const BYINC = Object.fromEntries(INCIDENTS.map(i=>[i.id,i]));
+
+/* =========================================================
+   SEARCH ENGINE
+   ========================================================= */
+const SYN = {nude:["intimate","private"],nudes:["intimate","private"],leak:["private","intimate"],leaked:["private","intimate"],
+  pic:["photo"],pics:["photo"],picture:["photo"],pictures:["photo"],dp:["photo"],video:["photo"],videos:["photo"],mms:["voyeurism","private"],
+  hacked:["hack"],troll:["trolling"],trolls:["trolling"],bully:["cyberbullying"],bullying:["cyberbullying"],boss:["workplace"],office:["workplace"],
+  husband:["domestic"],inlaws:["in-laws"],beaten:["beating"],beat:["beating"],fired:["dismissed"],eve:["eve teasing"],teasing:["eve teasing"],
+  revenge:["intimate"],ai:["deepfake"],rape:["sexual assault"],raped:["rape"],touch:["molest"],touched:["molest"],groped:["grope"],
+  talak:["talaq"],sextortion:["blackmail"],money:["extortion"],divorce:["alimony"],abort:["abortion"]};
+const STOP = new Set(["the","and","for","are","was","with","has","have","what","who","how","can","not","she","her","him","his","she","did","does","will","from","that","this","you","your","amp","quot"]);
+
+function tokenize(q){
+  return q.toLowerCase().replace(/[^a-z0-9\s-]/g," ").split(/\s+/).filter(t=>t.length>1 && !STOP.has(t));
+}
+function expand(tokens){
+  const out = new Set();
+  tokens.forEach(t=>{
+    out.add(t);
+    if(t.length>4) out.add(t.replace(/(ing|ed|es|s)$/,""));
+    (SYN[t]||[]).forEach(x=>out.add(x));
+  });
+  return [...out].filter(t=>t.length>1);
+}
+function scoreLaw(law, tokens, exps){
+  let total = 0, matchedAll = true;
+  tokens.forEach(t=>{
+    const variants = expand([t]);
+    let best = 0;
+    variants.forEach(v=>{
+      let s = 0;
+      const compact = v.replace(/[^a-z0-9]/g,"");
+      if(law.h.title.includes(v)) s += 6;
+      if(law.h.kw.includes(v)) s += 5;
+      if(compact && law.h.code.includes(compact) && (/\d/.test(compact))) s += 7;
+      if(law.h.act.includes(v)) s += 3;
+      if(law.h.sum.includes(v)) s += 2;
+      if(law.h.pun.includes(v)) s += 1;
+      if(s>best) best=s;
+    });
+    if(best===0) matchedAll = false;
+    total += best;
+  });
+  if(matchedAll && tokens.length>1) total += 6;
+  return total;
+}
+
+/* =========================================================
+   STATE & RENDER
+   ========================================================= */
+const SAVE_KEY = "safespace_saved_laws";
+const state = {q:"", cat:"all", inc:null, savedOnly:false, saved:get(SAVE_KEY)||[], open:new Set()};
+
+function buildStatic(){
+  $("incidents").innerHTML = INCIDENTS.map(i=>`<button class="inc" data-inc="${i.id}" type="button"><span class="ic" aria-hidden="true">${i.ic}</span><span>${esc(i.label)}</span></button>`).join("");
+  renderChips();
+}
+function renderChips(){
+  $("cats").innerHTML = Object.entries(CATS).map(([k,v])=>`<button type="button" class="chip ${state.cat===k&&!state.savedOnly?'on':''}" data-cat="${k}">${v}</button>`).join("")
+    + `<button type="button" class="chip ${state.savedOnly?'on':''}" data-saved="1">⭐ Saved (${state.saved.length})</button>`;
+}
+function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+function hl(text, tokens){
+  let s = esc(text);
+  const toks = tokens.filter(t=>t.length>=3).map(escRe);
+  if(!toks.length) return s;
+  return s.replace(new RegExp("("+toks.join("|")+")","gi"), "<mark>$1</mark>");
+}
+
+function currentResults(){
+  let list;
+  const toks = tokenize(state.q);
+  if(state.inc){
+    list = BYINC[state.inc].laws.map(id=>BYID[id]).filter(Boolean);
+  } else if(toks.length){
+    list = LAWS.map(l=>({l,s:scoreLaw(l,toks)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.l);
+  } else list = LAWS.slice();
+  if(state.savedOnly) list = list.filter(l=>state.saved.includes(l.id));
+  if(state.cat!=="all") list = list.filter(l=>l.cat===state.cat);
+  return {list, toks};
+}
+
+function render(){
+  const {list, toks} = currentResults();
+  const hlToks = state.inc ? [] : toks;
+
+  /* incident buttons + panel */
+  document.querySelectorAll(".inc").forEach(b=>b.classList.toggle("on", b.dataset.inc===state.inc));
+  const panel = $("incPanel");
+  if(state.inc){
+    const i = BYINC[state.inc];
+    panel.classList.remove("hidden");
+    panel.innerHTML = `<h3>${i.ic} ${esc(i.label)}</h3>
+      <p><b>First step:</b> ${esc(i.tip)}</p>
+      <p class="hint">These ${i.laws.length} laws and guides apply, most relevant first.</p>
+      <button class="btn small" data-act="saveall">⭐ Save all for my complaint</button>
+      <button class="btn sec small" data-act="log">📁 Open Evidence Log</button>
+      <button class="btn sec small" data-act="back">← Show all laws</button>`;
+  } else panel.classList.add("hidden");
+
+  renderChips();
+
+  /* meta line */
+  let m = `${list.length} ${list.length===1?"law":"laws"} shown`;
+  if(toks.length && !state.inc) m += ` for “${esc(state.q.trim())}”`;
+  $("meta").innerHTML = m;
+  $("qclear").classList.toggle("hidden", !state.q);
+
+  /* list */
+  if(!list.length){
+    $("lawList").innerHTML = `<div class="card empty"><p style="font-size:1.1rem"><b>No matching law found.</b></p>
+      <p>Try a simpler word (e.g. <i>threat</i>, <i>photo</i>, <i>husband</i>, <i>job</i>), an old section number like <i>498A</i>, or tap one of the situations above.</p>
+      <p>You can always call <b>181</b> (Women Helpline) or <b>15100</b> (free legal aid).</p>
+      <button class="btn sec small" data-act="reset">Reset filters</button></div>`;
+    return;
+  }
+  $("lawList").innerHTML = list.map(l=>{
+    const open = state.open.has(l.id);
+    const saved = state.saved.includes(l.id);
+    return `<article class="law" id="law-${l.id}">
+      <div class="law-h" data-act="toggle" data-id="${l.id}">
+        <span class="badge c-${l.cat}">${CATNAME[l.cat]}</span>
+        <h3>${hl(l.title,hlToks)}</h3>
+        <div class="codes"><b>${hl(l.act,hlToks)}</b> · ${hl(l.sec,hlToks)}${l.old!=="—"?` · <i>formerly ${hl(l.old,hlToks)}</i>`:""}</div>
+        <p class="sum">${hl(l.sum,hlToks)}</p>
+      </div>
+      <div class="more ${open?"":"hidden"}">
+        ${l.pun!=="—"?`<div class="pun"><b>Punishment / outcome:</b> ${hl(l.pun,hlToks)}</div>`:""}
+        <p class="hint">General information only. Confirm the current text with a lawyer or the DLSA (15100).</p>
+      </div>
+      <div class="acts">
+        ${l.pun!=="—"?`<button type="button" data-act="toggle" data-id="${l.id}" aria-expanded="${open}">${open?"Hide":"Show"} punishment</button>`:""}
+        <button type="button" class="${saved?"on":""}" data-act="save" data-id="${l.id}">${saved?"⭐ Saved":"☆ Save"}</button>
+        <button type="button" data-act="copy" data-id="${l.id}">📋 Copy</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+function clearSearch(){ $("q").value=""; state.q=""; render(); $("q").focus(); }
+function selectIncident(id){
+  state.inc = id; state.q = ""; $("q").value = ""; state.cat="all"; state.savedOnly=false;
+  state.open = new Set();
+  render();
+  $("incPanel").scrollIntoView({behavior:"smooth", block:"start"});
+}
+function goLaw(id){ showTab("laws"); selectIncident(id); }
+function toggleSave(id){
+  const i = state.saved.indexOf(id);
+  if(i>-1) state.saved.splice(i,1); else state.saved.push(id);
+  put(SAVE_KEY, state.saved);
+}
+
+$("q").addEventListener("input", e=>{ state.q = e.target.value; state.inc = null; render(); });
+$("qclear").addEventListener("click", clearSearch);
+
+$("incidents").addEventListener("click", e=>{
+  const b = e.target.closest("[data-inc]"); if(b) selectIncident(b.dataset.inc);
+});
+$("cats").addEventListener("click", e=>{
+  const c = e.target.closest("button"); if(!c) return;
+  if(c.dataset.saved){ state.savedOnly = !state.savedOnly; }
+  else { state.cat = c.dataset.cat; state.savedOnly = false; }
+  render();
+});
+$("incPanel").addEventListener("click", e=>{
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  if(b.dataset.act==="back"){ state.inc=null; render(); }
+  if(b.dataset.act==="log"){ showTab("log"); }
+  if(b.dataset.act==="saveall"){
+    BYINC[state.inc].laws.forEach(id=>{ if(!state.saved.includes(id)) state.saved.push(id); });
+    put(SAVE_KEY, state.saved); render(); toast("Saved. These will appear in your complaint draft.");
+  }
+});
+$("lawList").addEventListener("click", e=>{
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const id = b.dataset.id, act = b.dataset.act;
+  if(act==="reset"){ state.q=""; $("q").value=""; state.inc=null; state.cat="all"; state.savedOnly=false; render(); return; }
+  if(act==="toggle"){ state.open.has(id) ? state.open.delete(id) : state.open.add(id); render(); return; }
+  if(act==="save"){ toggleSave(id); render(); toast(state.saved.includes(id)?"Saved to your list":"Removed from saved"); return; }
+  if(act==="copy"){
+    const l = BYID[id];
+    const txt = `${l.title}\n${l.act} – ${l.sec}${l.old!=="—"?` (formerly ${l.old})`:""}\n${l.sum}${l.pun!=="—"?`\nPunishment/outcome: ${l.pun}`:""}`;
+    navigator.clipboard.writeText(txt).then(()=>toast("Copied"), ()=>toast("Could not copy"));
+  }
+});
+
+/* =========================================================
+   EVIDENCE LOG
+   ========================================================= */
+const LOG_KEY = "safespace_log";
+function renderLog(){
+  const data = get(LOG_KEY) || [];
+  $("logCount").textContent = data.length;
+  $("logList").innerHTML = data.length ? data.slice().reverse().map(x=>`
+    <div class="item">
+      <div class="meta"><b>${esc(x.date)}</b><span class="tag">${esc(x.platform)}</span><span class="tag">${esc(x.type)}</span>${x.user?`<span>${esc(x.user)}</span>`:""}</div>
+      <div>${esc(x.desc)}</div>
+      ${x.proof?`<div class="hint">📎 Evidence: ${esc(x.proof)}</div>`:""}
+    </div>`).join("") : `<p class="hint">No incidents saved yet.</p>`;
+}
+$("logForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const data = get(LOG_KEY) || [];
+  data.push({date:$("l_date").value, platform:$("l_platform").value, type:$("l_type").value,
+             user:$("l_user").value.trim(), desc:$("l_desc").value.trim(), proof:$("l_proof").value.trim()});
+  put(LOG_KEY, data); e.target.reset(); renderLog(); toast("Incident saved on this device");
+});
+function exportLog(){
+  const data = get(LOG_KEY) || [];
+  if(!data.length) return alert("Nothing to export yet.");
+  const txt = data.map((x,i)=>`#${i+1}\nDate: ${x.date}\nPlatform: ${x.platform}\nType: ${x.type}\nAccused: ${x.user||"-"}\nWhat happened: ${x.desc}\nEvidence location: ${x.proof||"-"}\n`).join("\n----------\n\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt],{type:"text/plain"}));
+  a.download = "incident-log.txt"; a.click();
+}
+function clearLog(){ if(confirm("Delete all saved incidents from this device?")){ put(LOG_KEY, []); renderLog(); } }
+
+/* =========================================================
+   COMPLAINT GENERATOR (adds your saved laws)
+   ========================================================= */
+function makeComplaint(){
+  const v = id => $(id).value.trim() || "[not provided]";
+  const laws = state.saved.map(id=>BYID[id]).filter(Boolean).filter(l=>l.cat!=="procedure" && l.cat!=="rights");
+  const lawText = laws.length
+    ? "\n\nI request that the following provisions be considered (please verify and apply as appropriate):\n" + laws.map(l=>`- ${l.title} (${l.act}, ${l.sec})`).join("\n")
+    : "";
+  const text =
+`To,
+The Officer-in-Charge / Cyber Crime Cell
+${v("c_city")}
+
+Subject: Complaint regarding harassment / abuse against me
+
+Respected Sir/Madam,
+
+I, ${v("c_name")}, wish to report harassment against me.
+
+Platform: ${v("c_plat")}
+Accused's username / number / link: ${v("c_acc")}
+Relationship: ${$("c_known").value}
+Harassment began on: ${v("c_from")}
+
+Details of the incidents:
+${v("c_what")}
+
+Evidence available: ${v("c_ev")}${lawText}
+
+I request you to register my complaint (FIR), take the necessary legal action under the applicable provisions of the Bharatiya Nyaya Sanhita, the Information Technology Act and other laws, and help get the offending content and accounts removed. I am ready to provide all evidence and any further information required.
+
+Yours faithfully,
+${v("c_name")}
+Date: ${new Date().toLocaleDateString("en-IN")}`;
+  $("c_text").textContent = text; $("c_out").classList.remove("hidden");
+  $("c_out").scrollIntoView({behavior:"smooth"});
+}
+function copyDraft(){
+  navigator.clipboard.writeText($("c_text").textContent).then(()=>toast("Copied"), ()=>alert("Please select and copy manually."));
+}
+
+/* =========================================================
+   SAFETY CHECKLIST
+   ========================================================= */
+const CHECKS = [
+  "Make my social media accounts private",
+  "Turn on two-factor authentication (2FA) everywhere",
+  "Use a different strong password for each important account",
+  "Turn off location tagging in photos and posts",
+  "Limit who can message, tag or comment on me",
+  "Check which apps have access to my accounts and remove unknown ones",
+  "Remove my phone number / email from public profiles",
+  "Never share OTPs, passwords or intimate content with anyone, even people I trust",
+  "Search my own name & photos online to see what is public",
+  "Tell one trusted person where my evidence is saved"
+];
+const CK_KEY = "safespace_checks";
+function renderChecks(){
+  const done = get(CK_KEY) || [];
+  $("checklist").innerHTML = CHECKS.map((c,i)=>`
+    <label class="chk" style="font-weight:400;margin:0">
+      <input type="checkbox" ${done.includes(i)?"checked":""} onchange="toggleCheck(${i},this.checked)">
+      <span>${esc(c)}</span>
+    </label>`).join("");
+  const pct = Math.round(done.length / CHECKS.length * 100);
+  $("bar").style.width = pct + "%";
+  $("barText").textContent = `${done.length} of ${CHECKS.length} steps done (${pct}%)`;
+}
+function toggleCheck(i, on){
+  let done = get(CK_KEY) || [];
+  done = on ? [...new Set([...done, i])] : done.filter(x=>x!==i);
+  put(CK_KEY, done); renderChecks();
+}
+
+/* ---------- start ---------- */
+buildStatic(); render(); renderLog(); renderChecks();
+</script>
+</body>
+</html>
